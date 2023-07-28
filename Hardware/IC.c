@@ -18,8 +18,9 @@ void IC_Init(void)
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;//定义结构体变量
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseInitStructure.TIM_Period = 0xffff;//设置自动重装载寄存器的值,一般设为最大值65535
-    TIM_TimeBaseInitStructure.TIM_Prescaler = 72-1;
+    TIM_TimeBaseInitStructure.TIM_Period = 0xffff;//设置自动重装载寄存器的值,一般设为最大值65535。
+    TIM_TimeBaseInitStructure.TIM_Prescaler = 72-1;//测量频率最低值为72MHz/72/65535=15Hz。增大分频系数可测量更低频率
+                                                    //上限就是分频后的标准频率
     TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStructure);
     //4.配置输入捕获单元
