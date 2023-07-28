@@ -30,6 +30,12 @@ void IC_Init(void)
     TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;//不分频，每次都捕获
     TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
     TIM_ICInit(TIM3, &TIM_ICInitStructure);
+
+    TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
+    TIM_ICInitStructure.TIM_ICFilter = 0x0;
+    TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Falling;
+    TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;//不分频，每次都捕获
+    TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_IndirectTI;
     //5.选择从模式的触发源
     TIM_SelectInputTrigger(TIM3, TIM_TS_TI1FP1);
     //6.选择触发后执行的操作
