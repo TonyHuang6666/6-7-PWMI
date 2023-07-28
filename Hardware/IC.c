@@ -29,13 +29,19 @@ void IC_Init(void)
     TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;
     TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;//不分频，每次都捕获
     TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
+    /*
+    方法1
     TIM_ICInit(TIM3, &TIM_ICInitStructure);
-
     TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
     TIM_ICInitStructure.TIM_ICFilter = 0x0;
     TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Falling;
     TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;//不分频，每次都捕获
     TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_IndirectTI;
+    TIM_ICInit(TIM3, &TIM_ICInitStructure);
+    */
+    //方法2：传入一个通道的结构体变量，在函数里自动把剩下的一个通道初始化成相反的配置
+    //通道一：直连、上升沿捕获，函数则配置通道二为交叉、下降沿捕获；传入通道二则相反
+    TIM_PWMIConfig(TIM3, &TIM_ICInitStructure);
     //5.选择从模式的触发源
     TIM_SelectInputTrigger(TIM3, TIM_TS_TI1FP1);
     //6.选择触发后执行的操作
@@ -44,7 +50,12 @@ void IC_Init(void)
     TIM_Cmd(TIM3, ENABLE);//开启定时器。漏了！！！！！！！！！！
 }
 
-uint16_t Get_Frequency(void)
+uint32_t Get_Frequency(void)
 {
-    return 1000000/TIM_GetCapture1(TIM3);
+    return 1000000/(TIM_GetCapture1(TIM3)+1);
+}
+
+uint32_t Get_Duty(void)
+{
+    return (TIM_GetCapture2(TIM3)+1)*100/(TIM_GetCapture1(TIM3)+1);
 }
